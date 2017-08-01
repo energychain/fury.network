@@ -30,6 +30,9 @@ var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:"ht
 
 
 function setCold(bucket,obj) {	
+	for(var i=0;i<obj.length;i++) {
+			obj[i].cmEditor="";		
+	}
 	$.post(coldAPI+"set/?token="+token,{bucket:bucket,obj:JSON.stringify(obj),token:token},function(data) {			
 		
 	});	
@@ -56,12 +59,15 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 			api_account=JSON.parse(info_data);
 			cold_account=api_account;
 			$('#colabURL').val(location.protocol+"//"+location.host+""+location.pathname+"?inject="+cold_account);
-			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showecase="+cold_account);
+			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showcase="+cold_account);
 			if($.qparams("inject")!=null) {
 					cold_account=$.qparams("inject");
 					console.log("INJECTED");
 			}	
-			
+			if($.qparams("showcase")!=null) {
+					cold_account=$.qparams("showcase");
+					console.log("INJECTED");
+			}
 			getCold(cold_account,"playground",function(store) {
 				
 					
@@ -84,7 +90,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 					}		
 				}
 				var store = files.slice();
-				if(($.qparams("showecase")!=null)&&(files.length==2)) {					
+				if(($.qparams("showcase")!=null)&&(files.length==2)) {					
 					$('#editor_1').html(files[0].content);
 					eval(files[1].content);
 					$('.fshide').hide();
@@ -104,13 +110,15 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 							  ]
 					});	 	
 						
-					editor.on('change', function (res, cb) {
+					editor.on('change', function (res, cb) {					
 					  if (!store.some(function (f, i) {
 						if (f.type === res.type) {
 						  store[i] = res
+						  
 						  return true
 						}
 					  })) {
+						
 						store.push(res)
 					  }
 
