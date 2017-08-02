@@ -25,7 +25,17 @@ if($.qparams("extid")!=null) {
 var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:"https://demo.stromdao.de/rpc",abilocation:"https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/6dc9e073/smart_contracts/"});
 
 
-
+node.stromkonto("0x19BF166624F485f191d82900a5B7bc22Be569895").then(function(sko) {
+	sko.balancesHaben(node.wallet.address).then(function(haben) {
+		sko.balancesSoll(node.wallet.address).then(function(soll) {		
+			if(haben-soll>=0) {
+					$('#infoAccount').show();
+			} else {
+					$('#infoAccount').hide();
+			}
+		});
+	});	
+});
 
 
 
@@ -58,19 +68,24 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 		$.post(api+"info/"+node.wallet.address+"?token="+token,{token:token},function(info_data) {
 			api_account=JSON.parse(info_data);
 			cold_account=api_account;
-			$('#colabURL').val(location.protocol+"//"+location.host+""+location.pathname+"?inject="+cold_account);
-			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showcase="+cold_account);
+
 			if($.qparams("inject")!=null) {
 					cold_account=$.qparams("inject");
-					console.log("INJECTED");
 			}	
 			if($.qparams("showcase")!=null) {
 					cold_account=$.qparams("showcase");
-					console.log("INJECTED");
 			}
-			getCold(cold_account,"playground",function(store) {
-				
-					
+			if(node.storage.getItemSync(cold_account)!=null) {
+				cold_account=node.storage.getItemSync(cold_account);
+			}
+			if($.qparams("extid")!=null) {
+					//cold_account=$.qparams("showcase");
+					node.storage.setItemSync($.qparams("extid"),node.wallet.address);
+			}
+			 $('#colabURL').val(location.protocol+"//"+location.host+""+location.pathname+"?inject="+cold_account);
+			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showcase="+cold_account);
+			
+			getCold(cold_account,"playground",function(store) {	
 				var files= [{
 						  type: 'html',
 						  name: 'html',
@@ -95,6 +110,18 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 					eval(files[1].content);
 					$('.fshide').hide();
 					$('#editor_1').height("1000px");
+					node.roleLookup().then(
+						function(rl) {
+							console.log("Has Cold Account",cold_account);
+							rl.getName(cold_account).then(function(name) {
+							  $('#rlname').html(name);
+							  $('#rlname').show();
+							  if((name!=null)&&(name.length>0)) {								  
+								node.storage.setItemSync(name,$.qparams("showcase"));  
+							  }
+							});
+						}	
+					);
 				} else {
 					$('.fshide').show();
 					editor=new Jotted(document.querySelector('#editor_1'), {
