@@ -28,7 +28,8 @@ var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:"ht
 node.stromkonto("0x19BF166624F485f191d82900a5B7bc22Be569895").then(function(sko) {
 	sko.balancesHaben(node.wallet.address).then(function(haben) {
 		sko.balancesSoll(node.wallet.address).then(function(soll) {		
-			if(haben-soll>=0) {
+		    console.log(soll,haben);
+			if(haben-soll<=0) {
 					$('#infoAccount').show();
 			} else {
 					$('#infoAccount').hide();
