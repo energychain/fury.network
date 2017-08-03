@@ -6,6 +6,7 @@ var editor={};
 var persist_store={};
 var persist_timeout={};
 var persist_function=null;
+var perm_account="";
 
 $.qparams = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -85,7 +86,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 			}
 			 $('#colabURL').val(location.protocol+"//"+location.host+""+location.pathname+"?inject="+cold_account);
 			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showcase="+cold_account);
-			
+			perm_account=cold_account;
 			getCold(cold_account,"playground",function(store) {	
 				var files= [{
 						  type: 'html',
@@ -166,7 +167,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 $('#subscribe').click(function() {
 	if($('#subscribe').attr('aria-pressed')) {
 		  OneSignal.push(function() {		  
-			OneSignal.sendTags(JSON.parse('{"'+node.wallet.address+'":"1"}'));
+			OneSignal.sendTags(JSON.parse('{"'+perm_account+'":"1"}'));
 		  });
 		} else {
 		OneSignal.push(function() {
