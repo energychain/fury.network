@@ -166,7 +166,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 $('#subscribe').click(function() {
 	if($('#subscribe').attr('aria-pressed')) {
 		  OneSignal.push(function() {		  
-			OneSignal.sendTags(JSON.parse('{'+node.wallet.address+':1}'));
+			OneSignal.sendTags(JSON.parse('{"'+node.wallet.address+'":"1"}'));
 		  });
 		} else {
 		OneSignal.push(function() {
