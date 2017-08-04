@@ -182,3 +182,4 @@ $('#subscribe').click(function() {
 		}]);
 	}	
 });
+$('#subscribe').attr('aria-pressed',false);
