@@ -113,6 +113,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 					}		
 				}
 				var store = files.slice();
+				
 				if(($.qparams("showcase")!=null)&&(files.length==2)) {					
 					$('#editor_1').html(files[0].content);
 					eval(files[1].content);
@@ -131,46 +132,61 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 						}	
 					);
 				} else {
-					$('.fshide').show();
-					editor=new Jotted(document.querySelector('#editor_1'), {
-							files:files,
-							 plugins: [
-								'stylus',
-								{
-								  name: 'codemirror',
-								  options: {
-									lineNumbers: true
-								  }
-								}
-							  ]
-					});	 	
-						
-					editor.on('change', function (res, cb) {					
-					  if (!store.some(function (f, i) {
-						if (f.type === res.type) {
-						  store[i] = res
-						  
-						  return true
-						}
-					  })) {
-						
-						store.push(res)
-					  }
-
-					  cb(null, res)
-					  persist_store=store;
-					  persist_function=function() {				
-							setCold("playground",persist_store);
-							$("#gistGET").removeAttr("disabled");
-					  };
-					  clearTimeout(persist_timeout);
-					  persist_timeout=setTimeout(persist_function,5000);
-					   
-					})
+					if($.qparams("gist")!=null) {
+						$.get("https://api.github.com/gists/"+$.qparams("gist"),function(gist) {
+								files[0].content=gist.files["base.html"].content;
+								files[1].content=gist.files["base.js"].content;
+								renderEditor(files,store);
+						});
+					
+					} else {
+						renderEditor(files,store);
+					} 
+					
 				}
 			});
 		});
 });
+function renderEditor(files,store) {
+	
+	$('.fshide').show();
+	editor=new Jotted(document.querySelector('#editor_1'), {
+			files:files,
+			 plugins: [
+				'stylus',
+				{
+				  name: 'codemirror',
+				  options: {
+					lineNumbers: true
+				  }
+				}
+			  ]
+	});	 	
+		
+	editor.on('change', function (res, cb) {					
+	  if (!store.some(function (f, i) {
+		if (f.type === res.type) {
+		  store[i] = res
+		  
+		  return true
+		}
+	  })) {
+		
+		store.push(res)
+	  }
+
+	  cb(null, res)
+	  persist_store=store;
+	  persist_function=function() {				
+			setCold("playground",persist_store);
+			$("#gistGET").removeAttr("disabled");
+	  };
+	  clearTimeout(persist_timeout);
+	  persist_timeout=setTimeout(persist_function,5000);
+	   
+	})	
+	
+}
 $('#gistGET').click(function() {
 	$('#gistGET').attr('disabled','disabled');
 	 setGist("playground",persist_store);
