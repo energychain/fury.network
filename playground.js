@@ -38,9 +38,15 @@ node.stromkonto("0x19BF166624F485f191d82900a5B7bc22Be569895").then(function(sko)
 		});
 	});	
 });
-
-
-
+function setGist(bucket,obj) {	
+	for(var i=0;i<obj.length;i++) {
+			obj[i].cmEditor="";		
+	}
+	$.post(api+"gist/set/?token="+token,{bucket:bucket,obj:JSON.stringify(obj),token:token},function(data) {			
+			data=JSON.parse(data);
+			$('#gistURL').val("https://gist.github.com/anonymous/"+data.id);
+	});	
+}
 function setCold(bucket,obj) {	
 	for(var i=0;i<obj.length;i++) {
 			obj[i].cmEditor="";		
@@ -155,6 +161,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 					  persist_store=store;
 					  persist_function=function() {				
 							setCold("playground",persist_store);
+							$("#gistGET").removeAttr("disabled");
 					  };
 					  clearTimeout(persist_timeout);
 					  persist_timeout=setTimeout(persist_function,5000);
@@ -163,6 +170,10 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 				}
 			});
 		});
+});
+$('#gistGET').click(function() {
+	$('#gistGET').attr('disabled','disabled');
+	 setGist("playground",persist_store);
 });
 $('#subscribe').click(function() {
 	if($('#subscribe').attr('aria-pressed')) {
