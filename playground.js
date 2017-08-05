@@ -1,4 +1,4 @@
-var api="https://demo.stromdao.de/api/";
+var api="https://fury.network/api/";
 var coldAPI=api+"cold/";
 token="";
 var api_account="";
@@ -7,6 +7,8 @@ var persist_store={};
 var persist_timeout={};
 var persist_function=null;
 var perm_account="";
+var rpcurl="https://fury.network/rpc";
+window.playground="0.1";
 
 $.qparams = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -23,7 +25,7 @@ var extid="1234";
 if($.qparams("extid")!=null) {
 		extid=$.qparams("extid");
 }
-var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:"https://demo.stromdao.de/rpc",abilocation:"https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/"});
+var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:rpcurl,abilocation:"https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/"});
 
 
 node.stromkonto("0x19BF166624F485f191d82900a5B7bc22Be569895").then(function(sko) {
@@ -128,6 +130,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 							  if((name!=null)&&(name.length>0)) {								  
 								node.storage.setItemSync(name,$.qparams("showcase"));  
 							  }
+
 							});
 						}	
 					);
