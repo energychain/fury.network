@@ -107,7 +107,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 						  url: 'playground_base.js'
 						}	
 				];
-				console.log(s"STORE",store);
+				console.log("STORE",store);
 				if((typeof store !="undefined") && (store.length==files.length)) {
 					for(var i=0;i<files.length;i++) {
 							if(typeof store[i].content != undefined) {
