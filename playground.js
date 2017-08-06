@@ -61,6 +61,9 @@ function getCold(account,bucket,cb) {
 	$.get(coldAPI+"get/",{bucket:bucket,token:token,account:account},function(data) {	
 		data = JSON.parse(data);		
 		if(typeof data.data != "undefined") {
+			if(typeof data.ipfsroot!="undefined") {
+							$('#ipfsroot').val(data.ipfsroot);
+			}	
 			cb(JSON.parse(data.data));							
 		} else {
 				cb({});
@@ -96,9 +99,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showcase="+cold_account);
 			perm_account=cold_account;
 			getCold(cold_account,"playground",function(store) {	
-				if((typeof store !="undefined")&&(typeof store.ipfsroot!="undefined")) {
-							$('#ipfsroot').val(store.ipfsroot);
-				}	
+
 				var files= [{
 						  type: 'html',
 						  name: 'html',
