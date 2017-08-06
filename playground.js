@@ -22,6 +22,12 @@ $.qparams = function(name){
 
 var extid="1234";
 
+var persist_function=function() {	
+			console.log("PERSISTING",persist_store);
+			setCold("playground",persist_store);
+			$("#gistGET").removeAttr("disabled");
+};
+	  
 if($.qparams("extid")!=null) {
 		extid=$.qparams("extid");
 }
@@ -71,9 +77,6 @@ function getCold(account,bucket,cb) {
 	});	
 }
 
-function saveSession() {
-		
-}
 $('.fshide').hide();
 $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.substr(0,10)},function( data ) {
 		data=JSON.parse(data);		
@@ -139,15 +142,20 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 						}	
 					);
 				} else {
+					
 					if($.qparams("gist")!=null) {
 						$.get("https://api.github.com/gists/"+$.qparams("gist"),function(gist) {
 								files[0].content=gist.files["base.html"].content;
 								files[1].content=gist.files["base.js"].content;
 								renderEditor(files,store);
+								persist_store=store;
+								persist_function();
 						});
 					
 					} else {
 						renderEditor(files,store);
+						persist_store=store;
+						persist_function();
 					} 
 					
 				}
@@ -181,17 +189,13 @@ function renderEditor(files,store) {
 		
 		store.push(res)
 	  }
-
 	  cb(null, res)
 	  persist_store=store;
-	  persist_function=function() {				
-			setCold("playground",persist_store);
-			$("#gistGET").removeAttr("disabled");
-	  };
 	  clearTimeout(persist_timeout);
 	  persist_timeout=setTimeout(persist_function,5000);
 	   
 	})	
+	$( "#editor_1" ).trigger( "change" );
 	
 }
 $('#gistGET').click(function() {
