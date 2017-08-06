@@ -112,7 +112,10 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 							if(typeof store[i].content != undefined) {
 								files[i].content=store[i].content;
 							}
-					}		
+					}	
+					if(typeof store.ipfsroot!="undefined") {
+							$('#ipfsroot').val(store.ipfsroot);
+					}	
 				}
 				var store = files.slice();
 				
