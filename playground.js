@@ -62,7 +62,7 @@ function getCold(account,bucket,cb) {
 		data = JSON.parse(data);		
 		if(typeof data.data != "undefined") {
 			if(typeof data.ipfsroot!="undefined") {
-							$('#ipfsroot').val(data.ipfsroot);
+							$('#ipfsroot').val("/ipfs/"+data.ipfsroot+"/base.html");
 			}	
 			cb(JSON.parse(data.data));							
 		} else {
