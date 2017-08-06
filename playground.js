@@ -96,6 +96,9 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showcase="+cold_account);
 			perm_account=cold_account;
 			getCold(cold_account,"playground",function(store) {	
+				if((typeof store !="undefined")&&(typeof store.ipfsroot!="undefined")) {
+							$('#ipfsroot').val(store.ipfsroot);
+				}	
 				var files= [{
 						  type: 'html',
 						  name: 'html',
@@ -106,17 +109,13 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 						  name: 'js',
 						  url: 'playground_base.js'
 						}	
-				];
-				console.log("STORE",store);
+				];				
 				if((typeof store !="undefined") && (store.length==files.length)) {
 					for(var i=0;i<files.length;i++) {
 							if(typeof store[i].content != undefined) {
 								files[i].content=store[i].content;
 							}
-					}	
-					if(typeof store.ipfsroot!="undefined") {
-							$('#ipfsroot').val(store.ipfsroot);
-					}	
+					}						
 				}
 				var store = files.slice();
 				
