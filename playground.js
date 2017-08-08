@@ -80,7 +80,24 @@ function getCold(account,bucket,cb) {
 		}
 	});	
 }
+function savePrivateStorage() {
+	if($.qparams("sectoken")!=null) {
+		sectoken=$.qparams("sectoken");
+		obj=window.localStorage;
+		$.post("/api/priv/set/data?token="+sectoken,{obj:JSON.stringify(obj),token:sectoken},function(data) {			
+			console.log(data);
+		});	
+	}
+}
 
+function loadPrivateStorage() {
+	if($.qparams("sectoken")!=null) {
+	$.get("/api/priv/get/data",{token:$.qparams("sectoken")},function(data) {	
+			data = JSON.parse(data);		
+			window.localStorage=data;
+		});	
+	}	
+}
 $('.fshide').hide();
 $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.substr(0,10)},function( data ) {
 		data=JSON.parse(data);		
