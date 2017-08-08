@@ -1,6 +1,7 @@
 var api="https://fury.network/api/";
 var coldAPI=api+"cold/";
-token="";
+var token="";
+var sectoken="";
 var api_account="";
 var editor={};
 var persist_store={};
@@ -30,6 +31,9 @@ var persist_function=function() {
 	  
 if($.qparams("extid")!=null) {
 		extid=$.qparams("extid");
+}
+if($.qparams("sectoken")!=null) {
+		sectoken=$.qparams("sectoken");
 }
 var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:rpcurl,abilocation:"https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/"});
 
