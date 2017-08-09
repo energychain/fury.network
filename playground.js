@@ -97,10 +97,12 @@ function loadPrivateStorage() {
 	if(window.localStorage.getItem("sectoken")!=null) {
 	$.get("/api/priv/get/data",{token:window.localStorage.getItem("sectoken")},function(data) {			
 			data = JSON.parse(data);	
+			console.log("DATA",data);
+			return;
 			if(data.balance<900) {
 				window.top.location.href="https://fury.network/?&extid=storage&showcase=0x3a4fb51ecD9123D517Ede72C27b870E3Ef860682";
 			} else {				
-			$('#storageLogin').hide();	
+				$('#storageLogin').hide();	
 			}
 			
 			data = JSON.parse(data.data);				
