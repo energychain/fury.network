@@ -99,7 +99,7 @@ function savePrivateStorage() {
 
 function loadPrivateStorage() {
 	if(window.localStorage.getItem("sectoken")!=null) {
-	$.get("/api/priv/get/data",{token:window.localStorage.getItem("sectoken"),function(data) {			
+	$.get("/api/priv/get/data",{token:window.localStorage.getItem("sectoken")},function(data) {			
 			data = JSON.parse(data);	
 			data = JSON.parse(data.data);				
 			$.each(data,function(a,b) {
