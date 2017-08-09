@@ -90,7 +90,7 @@ function savePrivateStorage() {
 		sectoken=window.localStorage.getItem("sectoken");
 		obj=window.localStorage;
 		$.post("/api/priv/set/data?token="+sectoken,{obj:JSON.stringify(obj),token:sectoken},function(data) {			
-			location.href="https://fury.network/?&extid=appswitch&inject=0x6B92D749d8646c5DE3fC62941e5B26CB71f8576f";
+			window.top.location.href="https://fury.network/?&extid=appswitch&inject=0x6B92D749d8646c5DE3fC62941e5B26CB71f8576f";
 		});	
 	}
 }
@@ -105,7 +105,9 @@ function loadPrivateStorage() {
 							window.localStorage.setItem(a,data[a]);
 					}
 			});
-			savePrivateStorage();
+			if($.qparams("sectoken")!=null) { 
+				savePrivateStorage();
+			}
 			//window.localStorage=data;
 		});	
 	}	
