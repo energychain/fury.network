@@ -99,6 +99,8 @@ function loadPrivateStorage() {
 			data = JSON.parse(data);	
 			if(data.balance<900) {
 				window.top.location.href="https://fury.network/?&extid=storage&showcase=0x3a4fb51ecD9123D517Ede72C27b870E3Ef860682";
+			} else {				
+			$('#storageLogin').hide();	
 			}
 			
 			data = JSON.parse(data.data);				
