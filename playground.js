@@ -9,7 +9,7 @@ var persist_timeout={};
 var persist_function=null;
 var perm_account="";
 var rpcurl="https://fury.network/rpc";
-var storage=[];
+var storage=function() {};
 window.playground="0.1";
 
 $.qparams = function(name){
@@ -39,8 +39,6 @@ if($.qparams("sectoken")!=null) {
 }
 if(window.localStorage.getItem("sectoken")!=null) {
 		loadPrivateStorage();
-
-	
 }
 var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:rpcurl,abilocation:"https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/"});
 
@@ -103,10 +101,11 @@ function loadPrivateStorage() {
 			data = JSON.parse(data);	
 			data = JSON.parse(data.data);				
 			$.each(data,function(a,b) {
-					if(a.substr(0,4)=="ext:") {
+					if(window.localStorage.getItem(a)==null) {
 							window.localStorage.setItem(a,data[a]);
 					}
 			});
+			savePrivateStorage();
 			//window.localStorage=data;
 		});	
 	}	
