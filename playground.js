@@ -135,7 +135,7 @@ $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.subs
 					//cold_account=$.qparams("showcase");
 					node.storage.setItemSync($.qparams("extid"),node.wallet.address);
 			}
-			 $('#colabURL').val(location.protocol+"//"+location.host+""+location.pathname+"?inject="+cold_account);
+			 $('#colabURL').val(location.protocol+"//"+location.host+""+location.pathname+"?extid="+$.qparams("extid")+"&inject="+cold_account);
 			$('#fsURL').val(location.protocol+"//"+location.host+""+location.pathname+"?showcase="+cold_account);
 			perm_account=cold_account;
 			getCold(cold_account,"playground",function(store) {	
