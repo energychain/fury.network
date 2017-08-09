@@ -93,8 +93,9 @@ function savePrivateStorage() {
 function loadPrivateStorage() {
 	if($.qparams("sectoken")!=null) {
 	$.get("/api/priv/get/data",{token:$.qparams("sectoken")},function(data) {	
-			data = JSON.parse(data);		
-			window.localStorage=data;
+			console.log(data);
+			data = JSON.parse(data);					
+			//window.localStorage=data;
 		});	
 	}	
 }
