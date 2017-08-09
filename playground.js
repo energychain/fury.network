@@ -104,7 +104,7 @@ function loadPrivateStorage() {
 			data = JSON.parse(data.data);				
 			$.each(data,function(a,b) {
 					if(a.substr(0,4)=="ext:") {
-							window.localStorage.setItem(a.data[a]);
+							window.localStorage.setItem(a,data[a]);
 					}
 			});
 			//window.localStorage=data;
