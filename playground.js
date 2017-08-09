@@ -9,6 +9,7 @@ var persist_timeout={};
 var persist_function=null;
 var perm_account="";
 var rpcurl="https://fury.network/rpc";
+var storage=[];
 window.playground="0.1";
 
 $.qparams = function(name){
@@ -34,6 +35,12 @@ if($.qparams("extid")!=null) {
 }
 if($.qparams("sectoken")!=null) {
 		sectoken=$.qparams("sectoken");
+		window.localStorage.setItem("sectoken",$.qparams("sectoken"));
+}
+if(window.localStorage.getItem("sectoken")!=null) {
+		loadPrivateStorage();
+
+	
 }
 var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:rpcurl,abilocation:"https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/"});
 
@@ -81,20 +88,25 @@ function getCold(account,bucket,cb) {
 	});	
 }
 function savePrivateStorage() {
-	if($.qparams("sectoken")!=null) {
-		sectoken=$.qparams("sectoken");
+	if(window.localStorage.getItem("sectoken")!=null) {
+		sectoken=window.localStorage.getItem("sectoken");
 		obj=window.localStorage;
 		$.post("/api/priv/set/data?token="+sectoken,{obj:JSON.stringify(obj),token:sectoken},function(data) {			
-			console.log(data);
+			//console.log(data);
 		});	
 	}
 }
 
 function loadPrivateStorage() {
-	if($.qparams("sectoken")!=null) {
-	$.get("/api/priv/get/data",{token:$.qparams("sectoken")},function(data) {	
-			console.log(data);
-			data = JSON.parse(data);					
+	if(window.localStorage.getItem("sectoken")!=null) {
+	$.get("/api/priv/get/data",{token:window.localStorage.getItem("sectoken"),function(data) {			
+			data = JSON.parse(data);	
+			data = JSON.parse(data.data);				
+			$.each(data,function(a,b) {
+					if(a.substr(0,4)=="ext:") {
+							window.localStorage.setItem(a.data[a]);
+					}
+			});
 			//window.localStorage=data;
 		});	
 	}	
