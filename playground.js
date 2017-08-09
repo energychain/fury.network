@@ -36,8 +36,6 @@ if($.qparams("extid")!=null) {
 if($.qparams("sectoken")!=null) {
 		sectoken=$.qparams("sectoken");
 		window.localStorage.setItem("sectoken",$.qparams("sectoken"));
-}
-if(window.localStorage.getItem("sectoken")!=null) {
 		loadPrivateStorage();
 }
 var node = new document.StromDAOBO.Node({external_id:extid,testMode:true,rpc:rpcurl,abilocation:"https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/"});
@@ -99,7 +97,9 @@ function loadPrivateStorage() {
 	if(window.localStorage.getItem("sectoken")!=null) {
 	$.get("/api/priv/get/data",{token:window.localStorage.getItem("sectoken")},function(data) {			
 			data = JSON.parse(data);	
-			console.log("BAL",data.balance);
+			if(data.balance<900) {
+				window.top.location.href="https://fury.network/?&extid=storage&showcase=0x3a4fb51ecD9123D517Ede72C27b870E3Ef860682";
+			}
 			
 			data = JSON.parse(data.data);				
 			$.each(data,function(a,b) {
