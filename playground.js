@@ -120,7 +120,7 @@ function loadPrivateStorage() {
 $('.fshide').hide();
 $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.substr(0,10)},function( data ) {
 		data=JSON.parse(data);		
-		token=data.token;
+		token=data.token;		
 		$.post(api+"info/"+node.wallet.address+"?token="+token,{token:token},function(info_data) {
 			api_account=JSON.parse(info_data);
 			cold_account=api_account;
