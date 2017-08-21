@@ -55,7 +55,28 @@ node.stromkonto("0x19BF166624F485f191d82900a5B7bc22Be569895").then(function(sko)
 });
 node.roleLookup().then(function(rl) {
 	rl.relations(node.wallet.address,26).then(function(rel) {
-		console.log("REL 26",rel);		
+		if(rel=="0x0000000000000000000000000000000000000000") {
+			obj=[];
+			var file_1={};
+			file_1.name="rsa_pub.key";
+			file_1.content=node.RSAPublicKey;
+			obj.push(file_1);
+			var file_2={};
+			file_2.name="rsa_info.txt";
+			file_2.content=node.wallet.address;
+			obj.push(file_2);
+			var file_3={};
+			file_3.name="node_pub.key";
+			file_3.content=node.nodeRSAPublicKey;
+			obj.push(file_3);
+			var file_4={};
+			file_4.name="node_info.txt";
+			file_4.content=node.nodeWallet.address;
+			obj.push(file_4);
+			$.post(coldAPI+"set/?token="+token,{bucket:bucket,obj:JSON.stringify(obj),token:token},function(data) {			
+				console.log("Publish RSA Key",data);
+			});	
+		}
 	});	
 });
 function setGist(bucket,obj) {	
