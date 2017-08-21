@@ -75,7 +75,13 @@ function publishRSA() {
 				file_4.content=node.nodeWallet.address;
 				obj.push(file_4);
 				$.post(api+"ipfs/set?token="+token,{bucket:"RSA",obj:JSON.stringify(obj),token:token},function(data) {			
-					console.log(data);
+					console.log(data.ipfsroot);
+					node.stringstoragefactory().then(function(ssf) {
+							ssf.build(data.ipfsroot).then(function ipfsss) {
+							console.log("IPFS SSS",ipfsss);	
+							});
+						
+					});
 					/*
 					$.get(coldAPI+"get/",{bucket:"RSA",token:token,account:node.wallet.address},function(data) {	
 						data = JSON.parse(data);		
