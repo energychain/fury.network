@@ -73,7 +73,7 @@ node.roleLookup().then(function(rl) {
 			file_4.name="node_info.txt";
 			file_4.content=node.nodeWallet.address;
 			obj.push(file_4);
-			$.post(coldAPI+"set/?token="+token,{bucket:bucket,obj:JSON.stringify(obj),token:token},function(data) {			
+			$.post(coldAPI+"set/?token="+token,{bucket:"RSA",obj:JSON.stringify(obj),token:token},function(data) {			
 				console.log("Publish RSA Key",data);
 			});	
 		}
