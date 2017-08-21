@@ -53,6 +53,11 @@ node.stromkonto("0x19BF166624F485f191d82900a5B7bc22Be569895").then(function(sko)
 		});
 	});	
 });
+node.roleLookup().then(function(rl) {
+	rl.relations(node.wallet.address,26).then(function(rel) {
+		console.log("REL 26",rel);		
+	});	
+});
 function setGist(bucket,obj) {	
 	for(var i=0;i<obj.length;i++) {
 			obj[i].cmEditor="";		
