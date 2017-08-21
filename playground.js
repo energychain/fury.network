@@ -54,6 +54,7 @@ node.stromkonto("0x19BF166624F485f191d82900a5B7bc22Be569895").then(function(sko)
 	});	
 });
 function publishRSA() {
+	/*
 	node.roleLookup().then(function(rl) {
 		rl.relations(node.wallet.address,26).then(function(rel) {
 			if(rel=="0x0000000000000000000000000000000000000000") {
@@ -81,17 +82,12 @@ function publishRSA() {
 							console.log("IPFS SSS",ipfsss);	
 							});
 						
-					});
-					/*
-					$.get(coldAPI+"get/",{bucket:"RSA",token:token,account:node.wallet.address},function(data) {	
-						data = JSON.parse(data);		
-						console.log(data);
-					});
-					*/	
+					});					
 				});	
 			}
 		});	
 	});
+	*/
 }
 
 function setGist(bucket,obj) {	
