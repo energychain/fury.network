@@ -74,11 +74,14 @@ function publishRSA() {
 				file_4.name="node_info.txt";
 				file_4.content=node.nodeWallet.address;
 				obj.push(file_4);
-				$.post(coldAPI+"set/?token="+token,{bucket:"RSA",obj:JSON.stringify(obj),token:token},function(data) {			
+				$.post(api+"ipfs/set?token="+token,{bucket:"RSA",obj:JSON.stringify(obj),token:token},function(data) {			
+					console.log(data);
+					/*
 					$.get(coldAPI+"get/",{bucket:"RSA",token:token,account:node.wallet.address},function(data) {	
 						data = JSON.parse(data);		
 						console.log(data);
-					});	
+					});
+					*/	
 				});	
 			}
 		});	
