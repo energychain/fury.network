@@ -77,7 +77,7 @@ function publishRSA() {
 				$.post(api+"ipfs/set?token="+token,{bucket:"RSA",obj:JSON.stringify(obj),token:token},function(data) {			
 					console.log(data.ipfsroot);
 					node.stringstoragefactory().then(function(ssf) {
-							ssf.str(data.ipfsroot).then(function(ipfsss) {
+							ssf.buildAndAssign(27,data.ipfsroot).then(function(ipfsss) {
 							console.log("IPFS SSS",ipfsss);	
 							});
 						
