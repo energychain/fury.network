@@ -22,7 +22,7 @@ $.qparams = function(name){
     }
 }
 
-var extid="1234";
+var extid="fury.network";
 
 var persist_function=function() {	
 			console.log("PERSISTING",persist_store);
@@ -103,22 +103,22 @@ function setCold(bucket,obj) {
 	for(var i=0;i<obj.length;i++) {
 			obj[i].cmEditor="";		
 	}
-	$.post(coldAPI+"set/?token="+token,{bucket:bucket,obj:JSON.stringify(obj),token:token},function(data) {			
-		
-	});	
+	
+	ipfs.files.add({path:'/fury.json',content:new ipfs.types.Buffer(JSON.stringify(obj),'ascii')}, function (err, files) {
+		window.localStorage.setItem(extid+"_"+bucket,files[0].hash);		
+		$.get("https://fury.network/ipfs/"+window.localStorage.getItem(extid+"_"+bucket),function(data) {
+					console.log(data);
+		});	
+	});
 }
 function getCold(account,bucket,cb) {	
-	$.get(coldAPI+"get/",{bucket:bucket,token:token,account:account},function(data) {	
-		data = JSON.parse(data);		
-		if(typeof data.data != "undefined") {
-			if(typeof data.ipfsroot!="undefined") {
-							$('#ipfsroot').val("/ipfs/"+data.ipfsroot+"/base.html");
-			}	
-			cb(JSON.parse(data.data));							
-		} else {
-				cb({});
-		}
-	});	
+	console.log("GET Cold",bucket);
+	if(window.localStorage.getItem(extid+"_"+bucket)!=null) {
+			$.get("https://fury.network/ipfs/"+window.localStorage.getItem(extid+"_"+bucket),function(data) {
+					cb(JSON.parse(data.data));	
+			});	
+		
+	}	
 }
 function savePrivateStorage() {
 	if(window.localStorage.getItem("sectoken")!=null) {
@@ -155,6 +155,7 @@ function loadPrivateStorage() {
 	}	
 }
 $('.fshide').hide();
+
 $.post( api+"auth",{extid:node.wallet.address,secret:node.wallet.privateKey.substr(0,10)},function( data ) {
 		data=JSON.parse(data);		
 		token=data.token;		
@@ -299,3 +300,8 @@ $('#subscribe').click(function() {
 	}	
 });
 $('#subscribe').attr('aria-pressed',false);
+const ipfs = new Ipfs();
+
+ipfs.on('ready', () => {
+	
+}); // END IPFS

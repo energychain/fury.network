@@ -8,7 +8,7 @@ $.qparams = function(name){
     }
 }
 
-var extid="1234";
+var extid="fury.network."+Math.random();
 
 if($.qparams("extid")!=null) {
 		extid=$.qparams("extid");
