@@ -20,8 +20,10 @@ function setCold(bucket,obj) {
 		data.push({path:"/fury.network"});
 		
 		for(var i=0;i<obj.length;i++) {		
+			if(obj[i].file.indexOf("/")>0) obj[i].file=obj[i].file.substring(obj[i].file.indexOf("/")+1);
 			if(obj[i].file=="playground_base.html") obj[i].file="index.html";
 			if(obj[i].file=="playground_base.js") obj[i].file="base.js";		
+			console.log("Final fname",obj[i].file);
 			data.push({content:new ipfs.types.Buffer(obj[i].content,'utf-8'),path:"/fury.network/"+obj[i].file});
 			//data.push({content:obj[i].content,path:"/fury.network/"+obj[i].file});
 			obj[i].cmEditor="";							
