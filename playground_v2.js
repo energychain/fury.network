@@ -10,34 +10,45 @@ $.qparams = function(name){
        return decodeURI(results[1]) || 0;
     }
 }
-var persist_function=function() {				
-			setCold("playground",persist_store);			
-};
+
 
 function setCold(bucket,obj) {	
-	var data=[];
-	data.push({path:"/fury.network"});
-	for(var i=0;i<obj.length;i++) {		
-		if(obj[i].file=="playground_base.html") obj[i].file="index.html";
-		if(obj[i].file=="playground_base.js") obj[i].file="base.js";
-		data.push({content:new ipfs.types.Buffer(obj[i].content,'ascii'),path:"/fury.network/"+obj[i].file});
-		obj[i].cmEditor="";							
-	}
+	const ipfs = new Ipfs();
 
-	console.log("PERSIST",data);
-	
-	ipfs.files.add(data, function (err, files) {
-			window.localStorage.setItem(extid+"_"+bucket,files[0].hash);		
-			for(var i=0;i<files.length;i++) {
-				$.get(ipfs_service+files[i].hash,function(data) {
-						//console.log(data);
-				});	
-			}
-			$('#fsURL').val(ipfs_service+files[0].hash+"/");
-			$('#colabURL').val("https://fury.network/?hash="+files[0].hash+"&extid="+extid);
-			console.log(ipfs_service+files[0].hash);
-	});			
+	ipfs.on('ready', () => {
+		var data=[];
+		data.push({path:"/fury.network"});
+		
+		for(var i=0;i<obj.length;i++) {		
+			if(obj[i].file=="playground_base.html") obj[i].file="index.html";
+			if(obj[i].file=="playground_base.js") obj[i].file="base.js";		
+			data.push({content:new ipfs.types.Buffer(obj[i].content,'utf-8'),path:"/fury.network/"+obj[i].file});
+			//data.push({content:obj[i].content,path:"/fury.network/"+obj[i].file});
+			obj[i].cmEditor="";							
+		}
+		
 
+			
+		
+		ipfs.files.add(data, function (err, files) {
+			console.log(err,files);
+				window.localStorage.setItem(extid+"_"+bucket,files[0].hash);	
+				var ld_cnt=0;	
+				for(var i=0;i<files.length;i++) {
+					$.get(ipfs_service+files[i].hash,function(data) {
+							ld_cnt++;
+					});	
+				}
+				$('#fsURL').val(ipfs_service+files[0].hash+"/");
+				$('#colabURL').val("https://fury.network/?hash="+files[0].hash+"&extid="+extid);
+				setInterval(function() {
+					if(ld_cnt==files.length) {
+						location.replace("./?hash="+files[0].hash+"&extid="+extid);
+					}
+				},100);
+				console.log(ipfs_service+files[0].hash);
+		});			
+	}); 
 }
 
 function renderEditor(files,store) {
@@ -68,16 +79,16 @@ function renderEditor(files,store) {
 		store.push(res)
 	  }
 	  cb(null, res)
-	  persist_store=store;
-	  clearTimeout(persist_timeout);
-	  persist_timeout=setTimeout(persist_function,5000);
-	   
+	  document.persist_store=store;
 	})	
+	
 	$( "#editor_1" ).trigger( "change" );
 	
 }
 
-
+function persist_function() {
+	setCold("playground",document.persist_store);	  	
+}
 function init() {
 	
 	var files= [{
@@ -102,22 +113,28 @@ function init() {
 					var store = files.slice();			
 					renderEditor(files,store);
 					persist_store=store;
-					persist_function();
+					//persist_function();
 				});
 			});
 	} else {
 		var store = files.slice();			
 		renderEditor(files,store);
 		persist_store=store;
-		persist_function();
+		//persist_function();
 	}
 					
 }
+$('#persist').click(function() {
+ $("#editor_1").toggle();
+ persist_function();		
+});
 var extid="fury.network."+Math.random();
 var hash_q="";
 
 if($.qparams("hash")!=null) {
 	hash_q="&hash="+$.qparams("hash");
+	$('#fsURL').val(ipfs_service+$.qparams("hash")+"/");
+	$('#colabURL').val("https://fury.network/?hash="+$.qparams("hash")+"&extid="+extid);
 }
 
 if($.qparams("extid")!=null) {
@@ -125,8 +142,6 @@ if($.qparams("extid")!=null) {
 } else {
 		location.href="?extid=fury.guest."+Math.random()+hash_q;
 }
-const ipfs = new Ipfs();
 
-ipfs.on('ready', () => {
-		init();
-}); // END IPFS
+init();
+
