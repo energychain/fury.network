@@ -1,5 +1,15 @@
 var abilocation="https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/";
 
+function resolve(address) {
+	name=address;
+	if(window.localStorage.getItem("address_"+address.toLowerCase())!=null) {
+			name=window.localStorage.getItem("address_"+address.toLowerCase());
+	}
+	if(name.length<1) name=address;
+	if(name.length>17) name=name.substr(0,17)+"...";
+	return name;
+}
+
 $.qparams = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results==null){
