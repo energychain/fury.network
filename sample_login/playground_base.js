@@ -1,3 +1,5 @@
+var abilocation="https://cdn.rawgit.com/energychain/StromDAO-BusinessObject/master/smart_contracts/";
+
 $.qparams = function(name){
     var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
     if (results==null){
