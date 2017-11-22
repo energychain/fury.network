@@ -133,12 +133,15 @@ $('#persist').click(function() {
  persist_function();		
 });
 var extid="fury.network."+Math.random();
-var hash_q="";
+var hash_q="?";
 
 if($.qparams("hash")!=null) {
 	hash_q="&hash="+$.qparams("hash");
 	$('#fsURL').val(ipfs_service+$.qparams("hash")+"/");
 	$('#colabURL').val("https://fury.network/?hash="+$.qparams("hash")+"&extid="+extid);
+}
+if($.qparams("base")!=null) {
+	hash_q+="&base="+$.qparams("base");
 }
 
 if($.qparams("extid")!=null) {
