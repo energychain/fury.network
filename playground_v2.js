@@ -90,16 +90,20 @@ function persist_function() {
 	setCold("playground",document.persist_store);	  	
 }
 function init() {
+	var base="./";
 	
+	if($.qparams("base")!=null) {
+			base=$.qparams("base");
+	}
 	var files= [{
 						  type: 'html',
 						  name: 'html',
-						  url: 'playground_base.html'
+						  url: base+'/playground_base.html'
 						},
 						{
 						  type: 'js',
 						  name: 'js',
-						  url: 'playground_base.js'
+						  url: base+'/playground_base.js'
 						}	
 				];		
 	if($.qparams("hash")!=null) {
